@@ -1,0 +1,1287 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("SKIBIDI.LOL V1.0")
+
+
+
+local mainTab = Window:NewTab("Main")
+local mainSection = mainTab:NewSection("Welcome to ERAZE.LOL")
+mainSection:NewLabel("Movement")
+
+
+mainSection:NewSlider("Walk Speed", "Makes you faster ⚡", 500, 16, function(s) -- 500 (MaxValue) | 16 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+end)
+
+mainSection:NewSlider("Jump Power", "Makes you Jump Higher 💫", 500, 25, function(s) -- 500 (MaxValue) | 25 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = s
+end)
+
+
+local AimTab = Window:NewTab("Aim")
+local AimSection = AimTab:NewSection("Aim Locks/Assists")
+
+
+AimSection:NewButton("Aim Lock", "Click C to Lock on a person", function()
+    getgenv().Aimbot = {
+        Status = true,
+        Keybind  = 'C',
+        Hitpart = 'Head',
+        ['Prediction'] = {
+            X = 0.125,
+            Y = 0.1,
+        },
+    }
+    
+    if getgenv().AimbotRan then
+        return
+    else
+        getgenv().AimbotRan = true
+    end
+    -- make it reexecutable to update settings
+    
+    
+    local RunService = game:GetService('RunService')
+    local Workspace = game:GetService('Workspace')
+    local Players = game:GetService('Players')
+    
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = Workspace.CurrentCamera
+    local Mouse = LocalPlayer:GetMouse()
+    
+    local Player = nil -- Our target player
+    
+    
+    local GetClosestPlayer = function() -- // Optimized GetClosestPlayer i believe?
+        local ClosestDistance, ClosestPlayer = 100000, nil
+        for _, Player : Player in pairs(Players:GetPlayers()) do
+            if Player.Name ~= LocalPlayer.Name and Player.Character and Player.Character:FindFirstChild('HumanoidRootPart') then
+                local Root, Visible = Camera:WorldToScreenPoint(Player.Character.HumanoidRootPart.Position)
+                if not Visible then
+                    continue
+                end
+                Root = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Root.X, Root.Y)).Magnitude
+                if Root < ClosestDistance then
+                    ClosestPlayer = Player
+                    ClosestDistance = Root
+                end
+            end
+        end
+        return ClosestPlayer
+    end
+    
+    Mouse.KeyDown:Connect(function(key) -- Get our closest player (toggle)
+        if key == Aimbot.Keybind:lower() then
+            Player = not Player and GetClosestPlayer() or nil
+        end
+    end)
+    
+    RunService.RenderStepped:Connect(function()
+        if not Player then
+            return
+        end
+        if not Aimbot.Status then
+            return
+        end
+        local Hitpart = Player.Character:FindFirstChild(Aimbot.Hitpart)
+        if not Hitpart then
+            return
+        end
+        Camera.CFrame = CFrame.new(Camera.CFrame.Position, Hitpart.Position + Hitpart.Velocity * Vector3.new(Aimbot.Prediction.X, Aimbot.Prediction.Y, Aimbot.Prediction.X))
+    end)
+end)
+
+
+local SettingsTab = Window:NewTab("Settings")
+local SettingsSection = SettingsTab:NewSection("Game Settings")
+
+
+SettingsSection:NewButton("FOV Settings", "Opens A Lil GUI where u Can change you Fiel Of View", function()
+    -- Instances:
+ 
+local ScreenGui = Instance.new("ScreenGui")
+local main = Instance.new("Frame")
+local title = Instance.new("TextLabel")
+local emotes = Instance.new("TextButton")
+local vynixu = Instance.new("TextButton")
+local ludicity = Instance.new("TextButton")
+local eclipse = Instance.new("TextButton")
+local god = Instance.new("TextButton")
+local troll = Instance.new("TextButton")
+ 
+--Properties:
+ 
+ScreenGui.Parent = game.CoreGui
+ 
+main.Name = "main"
+main.Parent = ScreenGui
+main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+main.BackgroundTransparency = 0.300
+main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+main.Position = UDim2.new(0.0163098853, 0, 0.319767386, 0)
+main.Size = UDim2.new(0, 212, 0, 251)
+main.Active = true
+main.Draggable = true
+ 
+title.Name = "title"
+title.Parent = main
+title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+title.BorderSizePixel = 0
+title.Position = UDim2.new(-1.1920929e-07, 0, 0, 0)
+title.Size = UDim2.new(0, 212, 0, 22)
+title.Font = Enum.Font.Cartoon
+title.Text = "FOV SETTINGS ERAZED"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 14.000
+ 
+emotes.Name = "emotes"
+emotes.Parent = main
+emotes.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+emotes.BackgroundTransparency = 0.300
+emotes.BorderColor3 = Color3.fromRGB(255, 255, 255)
+emotes.Position = UDim2.new(0.0566037744, 0, 0.843250215, 0)
+emotes.Size = UDim2.new(0, 187, 0, 22)
+emotes.Font = Enum.Font.Cartoon
+emotes.Text = "Fov.20"
+emotes.TextColor3 = Color3.fromRGB(255, 255, 255)
+emotes.TextSize = 14.000
+emotes.TextWrapped = true
+emotes.MouseButton1Down:connect(function()
+  workspace.CurrentCamera.FieldOfView = 20 
+end)
+ 
+vynixu.Name = "vynixu"
+vynixu.Parent = main
+vynixu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+vynixu.BackgroundTransparency = 0.300
+vynixu.BorderColor3 = Color3.fromRGB(255, 255, 255)
+vynixu.Position = UDim2.new(0.0566037744, 0, 0.13348788, 0)
+vynixu.Size = UDim2.new(0, 187, 0, 22)
+vynixu.Font = Enum.Font.Cartoon
+vynixu.Text = "Fov.120"
+vynixu.TextColor3 = Color3.fromRGB(255, 255, 255)
+vynixu.TextSize = 14.000
+vynixu.TextWrapped = true
+vynixu.MouseButton1Down:connect(function()
+    workspace.CurrentCamera.FieldOfView = 120
+end)
+ 
+ludicity.Name = "ludicity"
+ludicity.Parent = main
+ludicity.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ludicity.BackgroundTransparency = 0.300
+ludicity.BorderColor3 = Color3.fromRGB(255, 255, 255)
+ludicity.Position = UDim2.new(0.0566037744, 0, 0.280969203, 0)
+ludicity.Size = UDim2.new(0, 187, 0, 22)
+ludicity.Font = Enum.Font.Cartoon
+ludicity.Text = "Fov.100"
+ludicity.TextColor3 = Color3.fromRGB(255, 255, 255)
+ludicity.TextSize = 14.000
+ludicity.TextWrapped = true
+ludicity.MouseButton1Down:connect(function()
+   workspace.CurrentCamera.FieldOfView = 100
+end)
+ 
+eclipse.Name = "eclipse"
+eclipse.Parent = main
+eclipse.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+eclipse.BackgroundTransparency = 0.300
+eclipse.BorderColor3 = Color3.fromRGB(255, 255, 255)
+eclipse.Position = UDim2.new(0.0566037744, 0, 0.428859621, 0)
+eclipse.Size = UDim2.new(0, 187, 0, 22)
+eclipse.Font = Enum.Font.Cartoon
+eclipse.Text = "Fov.80"
+eclipse.TextColor3 = Color3.fromRGB(255, 255, 255)
+eclipse.TextSize = 14.000
+eclipse.TextWrapped = true
+eclipse.MouseButton1Down:connect(function()
+ workspace.CurrentCamera.FieldOfView = 80
+end)
+ 
+god.Name                   = "god"
+god.Parent                 = main
+god.BackgroundColor3       = Color3.fromRGB(0, 0, 0)
+god.BackgroundTransparency = 0.300
+god.BorderColor3           = Color3.fromRGB(255, 255, 255)
+god.Position               = UDim2.new(0.0566037744, 0, 0.566901684, 0)
+god.Size                   = UDim2.new(0, 187, 0, 22)
+god.Font                   = Enum.Font.Cartoon
+god.Text                   = "Fov.60"
+god.TextColor3             = Color3.fromRGB(255, 255, 255)
+god.TextSize               = 14.000
+god.TextWrapped            = true
+god.MouseButton1Down:connect(function()
+   workspace.CurrentCamera.FieldOfView = 60
+end)
+ 
+troll.Name = "troll"
+troll.Parent = main
+troll.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+troll.BackgroundTransparency = 0.300
+troll.BorderColor3 = Color3.fromRGB(255, 255, 255)
+troll.Position = UDim2.new(0.0566037744, 0, 0.708927751, 0)
+troll.Size = UDim2.new(0, 187, 0, 22)
+troll.Font = Enum.Font.Cartoon
+troll.Text = "Fov.40"
+troll.TextColor3 = Color3.fromRGB(255, 255, 255)
+troll.TextSize = 14.000
+troll.TextWrapped = true
+troll.MouseButton1Down:connect(function()
+   workspace.CurrentCamera.FieldOfView = 40
+end)
+end)
+
+
+SettingsSection:NewButton("Box ESP", "ButtonInfo", function()
+    local Settings = {
+        Box_Color = Color3.fromRGB(255, 0, 0),
+        Tracer_Color = Color3.fromRGB(255, 0, 0),
+        Tracer_Thickness = 1,
+        Box_Thickness = 1,
+        Tracer_Origin = "Bottom", -- Middle or Bottom if FollowMouse is on this won't matter...
+        Tracer_FollowMouse = false,
+        Tracers = false
+    }
+    local Team_Check = {
+        TeamCheck = false, -- if TeamColor is on this won't matter...
+        Green = Color3.fromRGB(0, 255, 0),
+        Red = Color3.fromRGB(255, 0, 0)
+    }
+    local TeamColor = true
+    
+    --// SEPARATION
+    local player = game:GetService("Players").LocalPlayer
+    local camera = game:GetService("Workspace").CurrentCamera
+    local mouse = player:GetMouse()
+    
+    local function NewQuad(thickness, color)
+        local quad = Drawing.new("Quad")
+        quad.Visible = false
+        quad.PointA = Vector2.new(0,0)
+        quad.PointB = Vector2.new(0,0)
+        quad.PointC = Vector2.new(0,0)
+        quad.PointD = Vector2.new(0,0)
+        quad.Color = color
+        quad.Filled = false
+        quad.Thickness = thickness
+        quad.Transparency = 1
+        return quad
+    end
+    
+    local function NewLine(thickness, color)
+        local line = Drawing.new("Line")
+        line.Visible = false
+        line.From = Vector2.new(0, 0)
+        line.To = Vector2.new(0, 0)
+        line.Color = color 
+        line.Thickness = thickness
+        line.Transparency = 1
+        return line
+    end
+    
+    local function Visibility(state, lib)
+        for u, x in pairs(lib) do
+            x.Visible = state
+        end
+    end
+    
+    local function ToColor3(col) --Function to convert, just cuz c;
+        local r = col.r --Red value
+        local g = col.g --Green value
+        local b = col.b --Blue value
+        return Color3.new(r,g,b); --Color3 datatype, made of the RGB inputs
+    end
+    
+    local black = Color3.fromRGB(0, 0 ,0)
+    local function ESP(plr)
+        local library = {
+            --//Tracer and Black Tracer(black border)
+            blacktracer = NewLine(Settings.Tracer_Thickness*2, black),
+            tracer = NewLine(Settings.Tracer_Thickness, Settings.Tracer_Color),
+            --//Box and Black Box(black border)
+            black = NewQuad(Settings.Box_Thickness*2, black),
+            box = NewQuad(Settings.Box_Thickness, Settings.Box_Color),
+            --//Bar and Green Health Bar (part that moves up/down)
+            healthbar = NewLine(3, black),
+            greenhealth = NewLine(1.5, black)
+        }
+    
+        local function Colorize(color)
+            for u, x in pairs(library) do
+                if x ~= library.healthbar and x ~= library.greenhealth and x ~= library.blacktracer and x ~= library.black then
+                    x.Color = color
+                end
+            end
+        end
+    
+        local function Updater()
+            local connection
+            connection = game:GetService("RunService").RenderStepped:Connect(function()
+                if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("Head") ~= nil then
+                    local HumPos, OnScreen = camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                    if OnScreen then
+                        local head = camera:WorldToViewportPoint(plr.Character.Head.Position)
+                        local DistanceY = math.clamp((Vector2.new(head.X, head.Y) - Vector2.new(HumPos.X, HumPos.Y)).magnitude, 2, math.huge)
+                        
+                        local function Size(item)
+                            item.PointA = Vector2.new(HumPos.X + DistanceY, HumPos.Y - DistanceY*2)
+                            item.PointB = Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2)
+                            item.PointC = Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)
+                            item.PointD = Vector2.new(HumPos.X + DistanceY, HumPos.Y + DistanceY*2)
+                        end
+                        Size(library.box)
+                        Size(library.black)
+    
+                        --//Tracer 
+                        if Settings.Tracers then
+                            if Settings.Tracer_Origin == "Middle" then
+                                library.tracer.From = camera.ViewportSize*0.5
+                                library.blacktracer.From = camera.ViewportSize*0.5
+                            elseif Settings.Tracer_Origin == "Bottom" then
+                                library.tracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y) 
+                                library.blacktracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y)
+                            end
+                            if Settings.Tracer_FollowMouse then
+                                library.tracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                                library.blacktracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                            end
+                            library.tracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                            library.blacktracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                        else 
+                            library.tracer.From = Vector2.new(0, 0)
+                            library.blacktracer.From = Vector2.new(0, 0)
+                            library.tracer.To = Vector2.new(0, 0)
+                            library.blacktracer.To = Vector2.new(0, 02)
+                        end
+    
+                        --// Health Bar
+                        local d = (Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2) - Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)).magnitude 
+                        local healthoffset = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth * d
+    
+                        library.greenhealth.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                        library.greenhealth.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2 - healthoffset)
+    
+                        library.healthbar.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                        library.healthbar.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y - DistanceY*2)
+    
+                        local green = Color3.fromRGB(0, 255, 0)
+                        local red = Color3.fromRGB(255, 0, 0)
+    
+                        library.greenhealth.Color = red:lerp(green, plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth);
+    
+                        if Team_Check.TeamCheck then
+                            if plr.TeamColor == player.TeamColor then
+                                Colorize(Team_Check.Green)
+                            else 
+                                Colorize(Team_Check.Red)
+                            end
+                        else 
+                            library.tracer.Color = Settings.Tracer_Color
+                            library.box.Color = Settings.Box_Color
+                        end
+                        if TeamColor == true then
+                            Colorize(plr.TeamColor.Color)
+                        end
+                        Visibility(true, library)
+                    else 
+                        Visibility(false, library)
+                    end
+                else 
+                    Visibility(false, library)
+                    if game.Players:FindFirstChild(plr.Name) == nil then
+                        connection:Disconnect()
+                    end
+                end
+            end)
+        end
+        coroutine.wrap(Updater)()
+    end
+    
+    for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v.Name ~= player.Name then
+            coroutine.wrap(ESP)(v)
+        end
+    end
+    
+    game.Players.PlayerAdded:Connect(function(newplr)
+        if newplr.Name ~= player.Name then
+            coroutine.wrap(ESP)(newplr)
+        end
+    end)
+end)
+
+
+SettingsSection:NewLabel("Gui Settings")
+
+SettingsSection:NewKeybind("Disable GUI", "Set a key to disable the GUI", Enum.KeyCode.P, function()
+	Library:ToggleUI()
+end)
+
+SettingsSection:NewColorPicker("Box Color", "Get A lil RGB Light Box", Color3.fromRGB(0,0,0), function(color)
+    print(color)
+    -- Second argument is the default color
+end)
+
+
+
+
+
+
+
+
+SettingsSection:NewButton("White GUI", "Get a White GUI", function()
+    local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+    local Window = Library.CreateLib("SKIBIDI.LOL v1.0", "LightTheme")
+    
+    
+    
+    local mainTab = Window:NewTab("Main")
+    local mainSection = mainTab:NewSection("Welcome to ERAZE.LOL")
+    mainSection:NewLabel("Movement")
+    
+    
+    mainSection:NewSlider("Walk Speed", "Makes you faster ⚡", 500, 16, function(s) -- 500 (MaxValue) | 16 (MinValue)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+    end)
+    
+    mainSection:NewSlider("Jump Power", "Makes you Jump Higher 💫", 500, 25, function(s) -- 500 (MaxValue) | 25 (MinValue)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = s
+    end)
+    
+    
+    local AimTab = Window:NewTab("Aim")
+    local AimSection = AimTab:NewSection("Aim Locks/Assists")
+    
+    
+    AimSection:NewButton("Aim Lock", "Click C to Lock on a person", function()
+        getgenv().Aimbot = {
+            Status = true,
+            Keybind  = 'C',
+            Hitpart = 'Head',
+            ['Prediction'] = {
+                X = 0.125,
+                Y = 0.1,
+            },
+        }
+        
+        if getgenv().AimbotRan then
+            return
+        else
+            getgenv().AimbotRan = true
+        end
+        -- make it reexecutable to update settings
+        
+        
+        local RunService = game:GetService('RunService')
+        local Workspace = game:GetService('Workspace')
+        local Players = game:GetService('Players')
+        
+        local LocalPlayer = Players.LocalPlayer
+        local Camera = Workspace.CurrentCamera
+        local Mouse = LocalPlayer:GetMouse()
+        
+        local Player = nil -- Our target player
+        
+        
+        local GetClosestPlayer = function() -- // Optimized GetClosestPlayer i believe?
+            local ClosestDistance, ClosestPlayer = 100000, nil
+            for _, Player : Player in pairs(Players:GetPlayers()) do
+                if Player.Name ~= LocalPlayer.Name and Player.Character and Player.Character:FindFirstChild('HumanoidRootPart') then
+                    local Root, Visible = Camera:WorldToScreenPoint(Player.Character.HumanoidRootPart.Position)
+                    if not Visible then
+                        continue
+                    end
+                    Root = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Root.X, Root.Y)).Magnitude
+                    if Root < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = Root
+                    end
+                end
+            end
+            return ClosestPlayer
+        end
+        
+        Mouse.KeyDown:Connect(function(key) -- Get our closest player (toggle)
+            if key == Aimbot.Keybind:lower() then
+                Player = not Player and GetClosestPlayer() or nil
+            end
+        end)
+        
+        RunService.RenderStepped:Connect(function()
+            if not Player then
+                return
+            end
+            if not Aimbot.Status then
+                return
+            end
+            local Hitpart = Player.Character:FindFirstChild(Aimbot.Hitpart)
+            if not Hitpart then
+                return
+            end
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position, Hitpart.Position + Hitpart.Velocity * Vector3.new(Aimbot.Prediction.X, Aimbot.Prediction.Y, Aimbot.Prediction.X))
+        end)
+    end)
+    
+    local SettingsTab = Window:NewTab("Settings")
+    local SettingsSection = SettingsTab:NewSection("Game Settings")
+    
+    
+    SettingsSection:NewButton("FOV Settings", "Opens A Lil GUI where u Can change you Fiel Of View", function()
+        -- Instances:
+     
+    local ScreenGui = Instance.new("ScreenGui")
+    local main = Instance.new("Frame")
+    local title = Instance.new("TextLabel")
+    local emotes = Instance.new("TextButton")
+    local vynixu = Instance.new("TextButton")
+    local ludicity = Instance.new("TextButton")
+    local eclipse = Instance.new("TextButton")
+    local god = Instance.new("TextButton")
+    local troll = Instance.new("TextButton")
+     
+    --Properties:
+     
+    ScreenGui.Parent = game.CoreGui
+     
+    main.Name = "main"
+    main.Parent = ScreenGui
+    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    main.BackgroundTransparency = 0.300
+    main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    main.Position = UDim2.new(0.0163098853, 0, 0.319767386, 0)
+    main.Size = UDim2.new(0, 212, 0, 251)
+    main.Active = true
+    main.Draggable = true
+     
+    title.Name = "title"
+    title.Parent = main
+    title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    title.BorderSizePixel = 0
+    title.Position = UDim2.new(-1.1920929e-07, 0, 0, 0)
+    title.Size = UDim2.new(0, 212, 0, 22)
+    title.Font = Enum.Font.Cartoon
+    title.Text = "FOV SETTINGS ERAZED"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 14.000
+     
+    emotes.Name = "emotes"
+    emotes.Parent = main
+    emotes.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    emotes.BackgroundTransparency = 0.300
+    emotes.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    emotes.Position = UDim2.new(0.0566037744, 0, 0.843250215, 0)
+    emotes.Size = UDim2.new(0, 187, 0, 22)
+    emotes.Font = Enum.Font.Cartoon
+    emotes.Text = "Fov.20"
+    emotes.TextColor3 = Color3.fromRGB(255, 255, 255)
+    emotes.TextSize = 14.000
+    emotes.TextWrapped = true
+    emotes.MouseButton1Down:connect(function()
+      workspace.CurrentCamera.FieldOfView = 20 
+    end)
+     
+    vynixu.Name = "vynixu"
+    vynixu.Parent = main
+    vynixu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    vynixu.BackgroundTransparency = 0.300
+    vynixu.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    vynixu.Position = UDim2.new(0.0566037744, 0, 0.13348788, 0)
+    vynixu.Size = UDim2.new(0, 187, 0, 22)
+    vynixu.Font = Enum.Font.Cartoon
+    vynixu.Text = "Fov.120"
+    vynixu.TextColor3 = Color3.fromRGB(255, 255, 255)
+    vynixu.TextSize = 14.000
+    vynixu.TextWrapped = true
+    vynixu.MouseButton1Down:connect(function()
+        workspace.CurrentCamera.FieldOfView = 120
+    end)
+     
+    ludicity.Name = "ludicity"
+    ludicity.Parent = main
+    ludicity.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    ludicity.BackgroundTransparency = 0.300
+    ludicity.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    ludicity.Position = UDim2.new(0.0566037744, 0, 0.280969203, 0)
+    ludicity.Size = UDim2.new(0, 187, 0, 22)
+    ludicity.Font = Enum.Font.Cartoon
+    ludicity.Text = "Fov.100"
+    ludicity.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ludicity.TextSize = 14.000
+    ludicity.TextWrapped = true
+    ludicity.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 100
+    end)
+     
+    eclipse.Name = "eclipse"
+    eclipse.Parent = main
+    eclipse.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    eclipse.BackgroundTransparency = 0.300
+    eclipse.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    eclipse.Position = UDim2.new(0.0566037744, 0, 0.428859621, 0)
+    eclipse.Size = UDim2.new(0, 187, 0, 22)
+    eclipse.Font = Enum.Font.Cartoon
+    eclipse.Text = "Fov.80"
+    eclipse.TextColor3 = Color3.fromRGB(255, 255, 255)
+    eclipse.TextSize = 14.000
+    eclipse.TextWrapped = true
+    eclipse.MouseButton1Down:connect(function()
+     workspace.CurrentCamera.FieldOfView = 80
+    end)
+     
+    god.Name                   = "god"
+    god.Parent                 = main
+    god.BackgroundColor3       = Color3.fromRGB(0, 0, 0)
+    god.BackgroundTransparency = 0.300
+    god.BorderColor3           = Color3.fromRGB(255, 255, 255)
+    god.Position               = UDim2.new(0.0566037744, 0, 0.566901684, 0)
+    god.Size                   = UDim2.new(0, 187, 0, 22)
+    god.Font                   = Enum.Font.Cartoon
+    god.Text                   = "Fov.60"
+    god.TextColor3             = Color3.fromRGB(255, 255, 255)
+    god.TextSize               = 14.000
+    god.TextWrapped            = true
+    god.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 60
+    end)
+     
+    troll.Name = "troll"
+    troll.Parent = main
+    troll.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    troll.BackgroundTransparency = 0.300
+    troll.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    troll.Position = UDim2.new(0.0566037744, 0, 0.708927751, 0)
+    troll.Size = UDim2.new(0, 187, 0, 22)
+    troll.Font = Enum.Font.Cartoon
+    troll.Text = "Fov.40"
+    troll.TextColor3 = Color3.fromRGB(255, 255, 255)
+    troll.TextSize = 14.000
+    troll.TextWrapped = true
+    troll.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 40
+    end)
+    end)
+    
+    
+    SettingsSection:NewButton("Box ESP", "ButtonInfo", function()
+        local Settings = {
+            Box_Color = Color3.fromRGB(255, 0, 0),
+            Tracer_Color = Color3.fromRGB(255, 0, 0),
+            Tracer_Thickness = 1,
+            Box_Thickness = 1,
+            Tracer_Origin = "Bottom", -- Middle or Bottom if FollowMouse is on this won't matter...
+            Tracer_FollowMouse = false,
+            Tracers = false
+        }
+        local Team_Check = {
+            TeamCheck = false, -- if TeamColor is on this won't matter...
+            Green = Color3.fromRGB(0, 255, 0),
+            Red = Color3.fromRGB(255, 0, 0)
+        }
+        local TeamColor = true
+        
+        --// SEPARATION
+        local player = game:GetService("Players").LocalPlayer
+        local camera = game:GetService("Workspace").CurrentCamera
+        local mouse = player:GetMouse()
+        
+        local function NewQuad(thickness, color)
+            local quad = Drawing.new("Quad")
+            quad.Visible = false
+            quad.PointA = Vector2.new(0,0)
+            quad.PointB = Vector2.new(0,0)
+            quad.PointC = Vector2.new(0,0)
+            quad.PointD = Vector2.new(0,0)
+            quad.Color = color
+            quad.Filled = false
+            quad.Thickness = thickness
+            quad.Transparency = 1
+            return quad
+        end
+        
+        local function NewLine(thickness, color)
+            local line = Drawing.new("Line")
+            line.Visible = false
+            line.From = Vector2.new(0, 0)
+            line.To = Vector2.new(0, 0)
+            line.Color = color 
+            line.Thickness = thickness
+            line.Transparency = 1
+            return line
+        end
+        
+        local function Visibility(state, lib)
+            for u, x in pairs(lib) do
+                x.Visible = state
+            end
+        end
+        
+        local function ToColor3(col) --Function to convert, just cuz c;
+            local r = col.r --Red value
+            local g = col.g --Green value
+            local b = col.b --Blue value
+            return Color3.new(r,g,b); --Color3 datatype, made of the RGB inputs
+        end
+        
+        local black = Color3.fromRGB(0, 0 ,0)
+        local function ESP(plr)
+            local library = {
+                --//Tracer and Black Tracer(black border)
+                blacktracer = NewLine(Settings.Tracer_Thickness*2, black),
+                tracer = NewLine(Settings.Tracer_Thickness, Settings.Tracer_Color),
+                --//Box and Black Box(black border)
+                black = NewQuad(Settings.Box_Thickness*2, black),
+                box = NewQuad(Settings.Box_Thickness, Settings.Box_Color),
+                --//Bar and Green Health Bar (part that moves up/down)
+                healthbar = NewLine(3, black),
+                greenhealth = NewLine(1.5, black)
+            }
+        
+            local function Colorize(color)
+                for u, x in pairs(library) do
+                    if x ~= library.healthbar and x ~= library.greenhealth and x ~= library.blacktracer and x ~= library.black then
+                        x.Color = color
+                    end
+                end
+            end
+        
+            local function Updater()
+                local connection
+                connection = game:GetService("RunService").RenderStepped:Connect(function()
+                    if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("Head") ~= nil then
+                        local HumPos, OnScreen = camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                        if OnScreen then
+                            local head = camera:WorldToViewportPoint(plr.Character.Head.Position)
+                            local DistanceY = math.clamp((Vector2.new(head.X, head.Y) - Vector2.new(HumPos.X, HumPos.Y)).magnitude, 2, math.huge)
+                            
+                            local function Size(item)
+                                item.PointA = Vector2.new(HumPos.X + DistanceY, HumPos.Y - DistanceY*2)
+                                item.PointB = Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2)
+                                item.PointC = Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)
+                                item.PointD = Vector2.new(HumPos.X + DistanceY, HumPos.Y + DistanceY*2)
+                            end
+                            Size(library.box)
+                            Size(library.black)
+        
+                            --//Tracer 
+                            if Settings.Tracers then
+                                if Settings.Tracer_Origin == "Middle" then
+                                    library.tracer.From = camera.ViewportSize*0.5
+                                    library.blacktracer.From = camera.ViewportSize*0.5
+                                elseif Settings.Tracer_Origin == "Bottom" then
+                                    library.tracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y) 
+                                    library.blacktracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y)
+                                end
+                                if Settings.Tracer_FollowMouse then
+                                    library.tracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                                    library.blacktracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                                end
+                                library.tracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                                library.blacktracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                            else 
+                                library.tracer.From = Vector2.new(0, 0)
+                                library.blacktracer.From = Vector2.new(0, 0)
+                                library.tracer.To = Vector2.new(0, 0)
+                                library.blacktracer.To = Vector2.new(0, 02)
+                            end
+        
+                            --// Health Bar
+                            local d = (Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2) - Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)).magnitude 
+                            local healthoffset = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth * d
+        
+                            library.greenhealth.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                            library.greenhealth.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2 - healthoffset)
+        
+                            library.healthbar.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                            library.healthbar.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y - DistanceY*2)
+        
+                            local green = Color3.fromRGB(0, 255, 0)
+                            local red = Color3.fromRGB(255, 0, 0)
+        
+                            library.greenhealth.Color = red:lerp(green, plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth);
+        
+                            if Team_Check.TeamCheck then
+                                if plr.TeamColor == player.TeamColor then
+                                    Colorize(Team_Check.Green)
+                                else 
+                                    Colorize(Team_Check.Red)
+                                end
+                            else 
+                                library.tracer.Color = Settings.Tracer_Color
+                                library.box.Color = Settings.Box_Color
+                            end
+                            if TeamColor == true then
+                                Colorize(plr.TeamColor.Color)
+                            end
+                            Visibility(true, library)
+                        else 
+                            Visibility(false, library)
+                        end
+                    else 
+                        Visibility(false, library)
+                        if game.Players:FindFirstChild(plr.Name) == nil then
+                            connection:Disconnect()
+                        end
+                    end
+                end)
+            end
+            coroutine.wrap(Updater)()
+        end
+        
+        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name ~= player.Name then
+                coroutine.wrap(ESP)(v)
+            end
+        end
+        
+        game.Players.PlayerAdded:Connect(function(newplr)
+            if newplr.Name ~= player.Name then
+                coroutine.wrap(ESP)(newplr)
+            end
+        end)
+    end)
+    
+    
+    SettingsSection:NewLabel("Gui Settings")
+    
+    SettingsSection:NewKeybind("Disable GUI", "Set a key to disable the GUI", Enum.KeyCode.P, function()
+        Library:ToggleUI()
+    end)
+    
+    SettingsSection:NewColorPicker("Box Color", "Get A lil RGB Light Box", Color3.fromRGB(0,0,0), function(color)
+        print(color)
+        -- Second argument is the default color
+    end)
+    
+end)
+
+
+
+
+
+
+SettingsSection:NewButton("Black GUI", "Get A Black GUI", function()
+    local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+    local Window = Library.CreateLib("SKIBIDI.LOL v1.0", "DarkTheme")
+    
+    
+    
+    local mainTab = Window:NewTab("Main")
+    local mainSection = mainTab:NewSection("Welcome to ERAZE.LOL")
+    mainSection:NewLabel("Movement")
+    
+    
+    mainSection:NewSlider("Walk Speed", "Makes you faster ⚡", 500, 16, function(s) -- 500 (MaxValue) | 16 (MinValue)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+    end)
+    
+    mainSection:NewSlider("Jump Power", "Makes you Jump Higher 💫", 500, 25, function(s) -- 500 (MaxValue) | 25 (MinValue)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = s
+    end)
+    
+    
+    local AimTab = Window:NewTab("Aim")
+    local AimSection = AimTab:NewSection("Aim Locks/Assists")
+    
+    
+    AimSection:NewButton("Aim Lock", "Click C to Lock on a person", function()
+        getgenv().Aimbot = {
+            Status = true,
+            Keybind  = 'C',
+            Hitpart = 'Head',
+            ['Prediction'] = {
+                X = 0.125,
+                Y = 0.1,
+            },
+        }
+        
+        if getgenv().AimbotRan then
+            return
+        else
+            getgenv().AimbotRan = true
+        end
+        -- make it reexecutable to update settings
+        
+        
+        local RunService = game:GetService('RunService')
+        local Workspace = game:GetService('Workspace')
+        local Players = game:GetService('Players')
+        
+        local LocalPlayer = Players.LocalPlayer
+        local Camera = Workspace.CurrentCamera
+        local Mouse = LocalPlayer:GetMouse()
+        
+        local Player = nil -- Our target player
+        
+        
+        local GetClosestPlayer = function() -- // Optimized GetClosestPlayer i believe?
+            local ClosestDistance, ClosestPlayer = 100000, nil
+            for _, Player : Player in pairs(Players:GetPlayers()) do
+                if Player.Name ~= LocalPlayer.Name and Player.Character and Player.Character:FindFirstChild('HumanoidRootPart') then
+                    local Root, Visible = Camera:WorldToScreenPoint(Player.Character.HumanoidRootPart.Position)
+                    if not Visible then
+                        continue
+                    end
+                    Root = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Root.X, Root.Y)).Magnitude
+                    if Root < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = Root
+                    end
+                end
+            end
+            return ClosestPlayer
+        end
+        
+        Mouse.KeyDown:Connect(function(key) -- Get our closest player (toggle)
+            if key == Aimbot.Keybind:lower() then
+                Player = not Player and GetClosestPlayer() or nil
+            end
+        end)
+        
+        RunService.RenderStepped:Connect(function()
+            if not Player then
+                return
+            end
+            if not Aimbot.Status then
+                return
+            end
+            local Hitpart = Player.Character:FindFirstChild(Aimbot.Hitpart)
+            if not Hitpart then
+                return
+            end
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position, Hitpart.Position + Hitpart.Velocity * Vector3.new(Aimbot.Prediction.X, Aimbot.Prediction.Y, Aimbot.Prediction.X))
+        end)
+    end)
+    
+    
+    local SettingsTab = Window:NewTab("Settings")
+    local SettingsSection = SettingsTab:NewSection("Game Settings")
+    
+    
+    SettingsSection:NewButton("FOV Settings", "Opens A Lil GUI where u Can change you Fiel Of View", function()
+        -- Instances:
+     
+    local ScreenGui = Instance.new("ScreenGui")
+    local main = Instance.new("Frame")
+    local title = Instance.new("TextLabel")
+    local emotes = Instance.new("TextButton")
+    local vynixu = Instance.new("TextButton")
+    local ludicity = Instance.new("TextButton")
+    local eclipse = Instance.new("TextButton")
+    local god = Instance.new("TextButton")
+    local troll = Instance.new("TextButton")
+     
+    --Properties:
+     
+    ScreenGui.Parent = game.CoreGui
+     
+    main.Name = "main"
+    main.Parent = ScreenGui
+    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    main.BackgroundTransparency = 0.300
+    main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    main.Position = UDim2.new(0.0163098853, 0, 0.319767386, 0)
+    main.Size = UDim2.new(0, 212, 0, 251)
+    main.Active = true
+    main.Draggable = true
+     
+    title.Name = "title"
+    title.Parent = main
+    title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    title.BorderSizePixel = 0
+    title.Position = UDim2.new(-1.1920929e-07, 0, 0, 0)
+    title.Size = UDim2.new(0, 212, 0, 22)
+    title.Font = Enum.Font.Cartoon
+    title.Text = "FOV SETTINGS ERAZED"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextSize = 14.000
+     
+    emotes.Name = "emotes"
+    emotes.Parent = main
+    emotes.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    emotes.BackgroundTransparency = 0.300
+    emotes.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    emotes.Position = UDim2.new(0.0566037744, 0, 0.843250215, 0)
+    emotes.Size = UDim2.new(0, 187, 0, 22)
+    emotes.Font = Enum.Font.Cartoon
+    emotes.Text = "Fov.20"
+    emotes.TextColor3 = Color3.fromRGB(255, 255, 255)
+    emotes.TextSize = 14.000
+    emotes.TextWrapped = true
+    emotes.MouseButton1Down:connect(function()
+      workspace.CurrentCamera.FieldOfView = 20 
+    end)
+     
+    vynixu.Name = "vynixu"
+    vynixu.Parent = main
+    vynixu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    vynixu.BackgroundTransparency = 0.300
+    vynixu.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    vynixu.Position = UDim2.new(0.0566037744, 0, 0.13348788, 0)
+    vynixu.Size = UDim2.new(0, 187, 0, 22)
+    vynixu.Font = Enum.Font.Cartoon
+    vynixu.Text = "Fov.120"
+    vynixu.TextColor3 = Color3.fromRGB(255, 255, 255)
+    vynixu.TextSize = 14.000
+    vynixu.TextWrapped = true
+    vynixu.MouseButton1Down:connect(function()
+        workspace.CurrentCamera.FieldOfView = 120
+    end)
+     
+    ludicity.Name = "ludicity"
+    ludicity.Parent = main
+    ludicity.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    ludicity.BackgroundTransparency = 0.300
+    ludicity.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    ludicity.Position = UDim2.new(0.0566037744, 0, 0.280969203, 0)
+    ludicity.Size = UDim2.new(0, 187, 0, 22)
+    ludicity.Font = Enum.Font.Cartoon
+    ludicity.Text = "Fov.100"
+    ludicity.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ludicity.TextSize = 14.000
+    ludicity.TextWrapped = true
+    ludicity.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 100
+    end)
+     
+    eclipse.Name = "eclipse"
+    eclipse.Parent = main
+    eclipse.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    eclipse.BackgroundTransparency = 0.300
+    eclipse.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    eclipse.Position = UDim2.new(0.0566037744, 0, 0.428859621, 0)
+    eclipse.Size = UDim2.new(0, 187, 0, 22)
+    eclipse.Font = Enum.Font.Cartoon
+    eclipse.Text = "Fov.80"
+    eclipse.TextColor3 = Color3.fromRGB(255, 255, 255)
+    eclipse.TextSize = 14.000
+    eclipse.TextWrapped = true
+    eclipse.MouseButton1Down:connect(function()
+     workspace.CurrentCamera.FieldOfView = 80
+    end)
+     
+    god.Name                   = "god"
+    god.Parent                 = main
+    god.BackgroundColor3       = Color3.fromRGB(0, 0, 0)
+    god.BackgroundTransparency = 0.300
+    god.BorderColor3           = Color3.fromRGB(255, 255, 255)
+    god.Position               = UDim2.new(0.0566037744, 0, 0.566901684, 0)
+    god.Size                   = UDim2.new(0, 187, 0, 22)
+    god.Font                   = Enum.Font.Cartoon
+    god.Text                   = "Fov.60"
+    god.TextColor3             = Color3.fromRGB(255, 255, 255)
+    god.TextSize               = 14.000
+    god.TextWrapped            = true
+    god.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 60
+    end)
+     
+    troll.Name = "troll"
+    troll.Parent = main
+    troll.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    troll.BackgroundTransparency = 0.300
+    troll.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    troll.Position = UDim2.new(0.0566037744, 0, 0.708927751, 0)
+    troll.Size = UDim2.new(0, 187, 0, 22)
+    troll.Font = Enum.Font.Cartoon
+    troll.Text = "Fov.40"
+    troll.TextColor3 = Color3.fromRGB(255, 255, 255)
+    troll.TextSize = 14.000
+    troll.TextWrapped = true
+    troll.MouseButton1Down:connect(function()
+       workspace.CurrentCamera.FieldOfView = 40
+    end)
+    end)
+    
+    
+    SettingsSection:NewButton("Box ESP", "ButtonInfo", function()
+        local Settings = {
+            Box_Color = Color3.fromRGB(255, 0, 0),
+            Tracer_Color = Color3.fromRGB(255, 0, 0),
+            Tracer_Thickness = 1,
+            Box_Thickness = 1,
+            Tracer_Origin = "Bottom", -- Middle or Bottom if FollowMouse is on this won't matter...
+            Tracer_FollowMouse = false,
+            Tracers = false
+        }
+        local Team_Check = {
+            TeamCheck = false, -- if TeamColor is on this won't matter...
+            Green = Color3.fromRGB(0, 255, 0),
+            Red = Color3.fromRGB(255, 0, 0)
+        }
+        local TeamColor = true
+        
+        --// SEPARATION
+        local player = game:GetService("Players").LocalPlayer
+        local camera = game:GetService("Workspace").CurrentCamera
+        local mouse = player:GetMouse()
+        
+        local function NewQuad(thickness, color)
+            local quad = Drawing.new("Quad")
+            quad.Visible = false
+            quad.PointA = Vector2.new(0,0)
+            quad.PointB = Vector2.new(0,0)
+            quad.PointC = Vector2.new(0,0)
+            quad.PointD = Vector2.new(0,0)
+            quad.Color = color
+            quad.Filled = false
+            quad.Thickness = thickness
+            quad.Transparency = 1
+            return quad
+        end
+        
+        local function NewLine(thickness, color)
+            local line = Drawing.new("Line")
+            line.Visible = false
+            line.From = Vector2.new(0, 0)
+            line.To = Vector2.new(0, 0)
+            line.Color = color 
+            line.Thickness = thickness
+            line.Transparency = 1
+            return line
+        end
+        
+        local function Visibility(state, lib)
+            for u, x in pairs(lib) do
+                x.Visible = state
+            end
+        end
+        
+        local function ToColor3(col) --Function to convert, just cuz c;
+            local r = col.r --Red value
+            local g = col.g --Green value
+            local b = col.b --Blue value
+            return Color3.new(r,g,b); --Color3 datatype, made of the RGB inputs
+        end
+        
+        local black = Color3.fromRGB(0, 0 ,0)
+        local function ESP(plr)
+            local library = {
+                --//Tracer and Black Tracer(black border)
+                blacktracer = NewLine(Settings.Tracer_Thickness*2, black),
+                tracer = NewLine(Settings.Tracer_Thickness, Settings.Tracer_Color),
+                --//Box and Black Box(black border)
+                black = NewQuad(Settings.Box_Thickness*2, black),
+                box = NewQuad(Settings.Box_Thickness, Settings.Box_Color),
+                --//Bar and Green Health Bar (part that moves up/down)
+                healthbar = NewLine(3, black),
+                greenhealth = NewLine(1.5, black)
+            }
+        
+            local function Colorize(color)
+                for u, x in pairs(library) do
+                    if x ~= library.healthbar and x ~= library.greenhealth and x ~= library.blacktracer and x ~= library.black then
+                        x.Color = color
+                    end
+                end
+            end
+        
+            local function Updater()
+                local connection
+                connection = game:GetService("RunService").RenderStepped:Connect(function()
+                    if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("Head") ~= nil then
+                        local HumPos, OnScreen = camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                        if OnScreen then
+                            local head = camera:WorldToViewportPoint(plr.Character.Head.Position)
+                            local DistanceY = math.clamp((Vector2.new(head.X, head.Y) - Vector2.new(HumPos.X, HumPos.Y)).magnitude, 2, math.huge)
+                            
+                            local function Size(item)
+                                item.PointA = Vector2.new(HumPos.X + DistanceY, HumPos.Y - DistanceY*2)
+                                item.PointB = Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2)
+                                item.PointC = Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)
+                                item.PointD = Vector2.new(HumPos.X + DistanceY, HumPos.Y + DistanceY*2)
+                            end
+                            Size(library.box)
+                            Size(library.black)
+        
+                            --//Tracer 
+                            if Settings.Tracers then
+                                if Settings.Tracer_Origin == "Middle" then
+                                    library.tracer.From = camera.ViewportSize*0.5
+                                    library.blacktracer.From = camera.ViewportSize*0.5
+                                elseif Settings.Tracer_Origin == "Bottom" then
+                                    library.tracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y) 
+                                    library.blacktracer.From = Vector2.new(camera.ViewportSize.X*0.5, camera.ViewportSize.Y)
+                                end
+                                if Settings.Tracer_FollowMouse then
+                                    library.tracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                                    library.blacktracer.From = Vector2.new(mouse.X, mouse.Y+36)
+                                end
+                                library.tracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                                library.blacktracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY*2)
+                            else 
+                                library.tracer.From = Vector2.new(0, 0)
+                                library.blacktracer.From = Vector2.new(0, 0)
+                                library.tracer.To = Vector2.new(0, 0)
+                                library.blacktracer.To = Vector2.new(0, 02)
+                            end
+        
+                            --// Health Bar
+                            local d = (Vector2.new(HumPos.X - DistanceY, HumPos.Y - DistanceY*2) - Vector2.new(HumPos.X - DistanceY, HumPos.Y + DistanceY*2)).magnitude 
+                            local healthoffset = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth * d
+        
+                            library.greenhealth.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                            library.greenhealth.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2 - healthoffset)
+        
+                            library.healthbar.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY*2)
+                            library.healthbar.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y - DistanceY*2)
+        
+                            local green = Color3.fromRGB(0, 255, 0)
+                            local red = Color3.fromRGB(255, 0, 0)
+        
+                            library.greenhealth.Color = red:lerp(green, plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth);
+        
+                            if Team_Check.TeamCheck then
+                                if plr.TeamColor == player.TeamColor then
+                                    Colorize(Team_Check.Green)
+                                else 
+                                    Colorize(Team_Check.Red)
+                                end
+                            else 
+                                library.tracer.Color = Settings.Tracer_Color
+                                library.box.Color = Settings.Box_Color
+                            end
+                            if TeamColor == true then
+                                Colorize(plr.TeamColor.Color)
+                            end
+                            Visibility(true, library)
+                        else 
+                            Visibility(false, library)
+                        end
+                    else 
+                        Visibility(false, library)
+                        if game.Players:FindFirstChild(plr.Name) == nil then
+                            connection:Disconnect()
+                        end
+                    end
+                end)
+            end
+            coroutine.wrap(Updater)()
+        end
+        
+        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name ~= player.Name then
+                coroutine.wrap(ESP)(v)
+            end
+        end
+        
+        game.Players.PlayerAdded:Connect(function(newplr)
+            if newplr.Name ~= player.Name then
+                coroutine.wrap(ESP)(newplr)
+            end
+        end)
+    end)
+    
+    
+    SettingsSection:NewLabel("Gui Settings")
+    
+    SettingsSection:NewKeybind("Disable GUI", "Set a key to disable the GUI", Enum.KeyCode.P, function()
+        Library:ToggleUI()
+    end)
+    
+    SettingsSection:NewColorPicker("Box Color", "Get A lil RGB Light Box", Color3.fromRGB(0,0,0), function(color)
+        print(color)
+        -- Second argument is the default color
+    end)
+    
+end)
+
+
